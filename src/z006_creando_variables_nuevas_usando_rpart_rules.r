@@ -76,8 +76,8 @@ df_apl[ , paste0("campo", j) := lapply( j, function(x) eval(parse(text = get_str
 # Guardo nuevos dataframes en carpeta
 output_folder <- paste0("./exp/FEAT_ENG_", format(Sys.Date(),"%d%m"),"/")
 dir.create( output_folder, showWarnings = FALSE )
-fwrite(df_gen, paste0(output_folder,"fe_rpart_rules_GENERACION.csv.tz"), row.names = F)
-fwrite(df_apl, paste0(output_folder,"fe_rpart_rules_APLICACION.csv.tz"), row.names = F)
+fwrite(df_gen, paste0(output_folder,"fe_rpart_rules_GENERACION.csv.gz"), row.names = F)
+fwrite(df_apl, paste0(output_folder,"fe_rpart_rules_APLICACION.csv.gz"), row.names = F)
 
 #==========================================================
 
