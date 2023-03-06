@@ -9,6 +9,9 @@ require("xgboost")
 
 #======================================================
 
+#cargo los datasets
+setwd( "~/buckets/b1/datasets/")
+
 # Cargo data
 dataset_generacion <- fread("./data/ibarra_generacion.txt.gz")
 
