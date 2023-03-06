@@ -4,8 +4,6 @@ gc(verbose = FALSE)
 # Librerías necesarias
 require("data.table")
 require("rpart")
-require("rattle")
-require("ggplot2")
 require("dplyr")
 require("rpart.plot")
 require("stringr")
@@ -13,11 +11,11 @@ require("stringr")
 #======================================================
 
 # Cargo data
-df_gen <- fread("./data/ibarra_generacion.txt.gz")
+df_gen <- fread("./data/ibarra_generacion.txt.gz") #data original
 df_gen[, clase01 :=  ifelse( clase=="SI", 1, 0 )]
 
 # Cargo data
-df_apl <- fread("./data/ibarra_aplicacion.txt.gz")
+df_apl <- fread("./data/ibarra_aplicacion.txt.gz") #data original
 
 #=======================================================
 # VARIABLES BOOLEANAS DERIVADAS DE RPART.RULES
@@ -33,6 +31,7 @@ lower.bound <- avg_minbucket*0.25
 
 modelo  <- rpart(formula=    "clase01 ~ . -clase",  
                  data=     df_gen,  
+                 method = "class",
                  xval=      5,
                  cp=       -0.3,     
                  minbucket= lower.bound,     
@@ -59,7 +58,7 @@ get_string = function(x){
     variable = splitted[to_id - 3]
     sub_to_reeplace = paste(variable, is, value1, to, value2, collapse = " ")
     # cat(sub_to_reeplace, "\n")
-    new_sub = paste(variable,">", value1, "&", variable, "<", value2, collapse = " ")
+    new_sub = paste(variable,">=", value1, "&", variable, "<", value2, collapse = " ")
     s = str_replace(s, sub_to_reeplace, new_sub)
     # cat(s,"(2)\n")
   }
@@ -69,18 +68,19 @@ get_string = function(x){
 }
   
 #Para cada regla creadas armo una variable booleana. 
+#hay veces que devuelv NA porque la fila evaluada tiene NA en alguna de las variables de la regla.
 j <- seq_len( nrules )
 df_gen[ , paste0("campo", j) := lapply( j, function(x) eval(parse(text = get_string(x)))) ]
 df_apl[ , paste0("campo", j) := lapply( j, function(x) eval(parse(text = get_string(x)))) ]
 
+
+
 # Guardo nuevos dataframes en carpeta
-output_folder <- paste0("./exp/FEAT_ENG_", format(Sys.Date(),"%d%m"),"/")
+output_folder <- "./exp/FE_RPART_RULES/"
 dir.create( output_folder, showWarnings = FALSE )
-fwrite(df_gen[, !c("clase01")], paste0(output_folder,"fe_rpart_rules_GENERACION.csv.gz"), row.names = F)
-fwrite(df_apl, paste0(output_folder,"fe_rpart_rules_APLICACION.csv.gz"), row.names = F)
+fwrite(df_gen[, c("numero_de_cliente", paste0("campo", j)), with=FALSE], paste0(output_folder,"fe_rpart_rules_GENERACION.csv.gz"), row.names = F)
+fwrite(df_apl[, c("numero_de_cliente", paste0("campo", j)), with=FALSE], paste0(output_folder,"fe_rpart_rules_APLICACION.csv.gz"), row.names = F)
 
 #==========================================================
-
-
 
 
