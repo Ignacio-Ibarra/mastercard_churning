@@ -59,7 +59,7 @@ for (i in 1:20)  {
 
 dtrain_lgb  <- lgb.Dataset(
   data = data.matrix(new_features),
-  label = clase_binaria)
+  label = dataset_generacion[ , clase01 ])
 
 mlgb <- lgb.train(
   dtrain_lgb,
