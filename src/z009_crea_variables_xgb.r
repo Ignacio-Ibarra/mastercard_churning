@@ -6,7 +6,7 @@ gc()
 
 require("data.table")
 require("xgboost")
-
+require("lightgbm")
 #======================================================
 
 #cargo los datasets
