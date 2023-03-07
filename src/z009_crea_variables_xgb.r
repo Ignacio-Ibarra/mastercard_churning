@@ -18,14 +18,14 @@ dataset_generacion <- fread("./data/ibarra_generacion.txt.gz")
 # Cargo data
 dataset_aplicacion <- fread("./data/ibarra_aplicacion.txt.gz")
 
-#======================================================
-
 #dejo la clase en 0,1
 dataset_generacion[ , clase01 := as.integer(clase=="SI") ]
 
 x.cols <- setdiff(names(copy(dataset_generacion)), c("numero_de_cliente", "clase","clase01"))
 
-
+#guardo los nro de cliente
+id_cli_gen <- dataset_generacion$numero_de_cliente
+id_cli_apl <- dataset_aplicacion$numero_de_cliente
 #=====================================================
 #Uso un modelo que tenga un colsample_bytree bajo
 #que fitee 300 árboles
@@ -47,7 +47,8 @@ modelo  <- xgb.train(data= dgeneracion,
                      colsample_bytree= 0.3)
 
 # Me crea una matriz de 105000 x 14072
-new_features <- xgb.create.features(model = modelo, data.matrix(dataset_generacion[ , x.cols, with=FALSE]))
+new_features <- xgb.create.features(model = modelo, 
+                                    data.matrix(dataset_generacion[ , x.cols, with=FALSE]))
 new_features <- as.data.table(as.data.frame(as.matrix(new_features)))
 
 #Le sumamos canaritos
@@ -56,9 +57,8 @@ for (i in 1:20)  {
   new_features[, paste0("canarito", i) := runif(nrow(new_features))]
 }
 
-## ---------------------------
-## Variable Importance !
-## ---------------------------
+#================================
+# Uso un LGBM con canaritos para hacer selección de variables
 
 dtrain_lgb  <- lgb.Dataset(
   data = data.matrix(new_features),
@@ -68,7 +68,7 @@ mlgb <- lgb.train(
   dtrain_lgb,
   params = list(
     objective = "binary",
-    max_bin = 15,
+    max_bin = 31,
     min_data_in_leaf = 4000,
     learning_rate = 0.05),
   verbose = -1)
@@ -81,3 +81,24 @@ id.canarito.tol <- idx[list.canaritos][tolerancia]
 important.features <- var.importance.features[1:id.canarito.tol]
 important.new.features <- important.features[grep("V\\d+", important.features)]
 
+#=========================================================
+
+new_features.apl <- xgb.create.features(model = modelo, 
+                                    data.matrix(dataset_aplicacion[ , x.cols, with=FALSE]))[, important.features]
+new_features.apl <- as.data.table(as.data.frame(as.matrix(new_features.apl)))
+
+
+#==========================================================
+#guardo dataset generación y aplicacion sólo con nuevos features
+
+gen <- cbind(id_cli_gen, new_features[ ,important.new.features, with=FALSE])
+rm(new_features)
+apl <- cbind(id_cli_apl, new_features.apl)
+rm(new_features.apl)
+
+
+# Guardo nuevos dataframes en carpeta
+output_folder <- "./exp/FE_XGB/"
+dir.create( output_folder, showWarnings = FALSE )
+fwrite(gen, paste0(output_folder,"fe_xgb_GENERACION.csv.gz"), row.names = F)
+fwrite(apl, paste0(output_folder,"fe_xgb_APLICACION.csv.gz"), row.names = F)
