@@ -85,7 +85,7 @@ important.new.features <- important.features[grep("V\\d+", important.features)]
 
 new_features.apl <- xgb.create.features(model = modelo, 
                                     data.matrix(dataset_aplicacion[ , x.cols, with=FALSE]))
-new_features.apl <- as.data.table(as.data.frame(as.matrix(new_features.apl)))[, important.new.features]
+new_features.apl <- as.data.table(as.data.frame(as.matrix(new_features.apl)))[, important.new.features, with = FALSE]
 
 
 #==========================================================
