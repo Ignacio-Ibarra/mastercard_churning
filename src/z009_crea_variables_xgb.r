@@ -10,7 +10,7 @@ require("lightgbm")
 #======================================================
 
 #cargo los datasets
-setwd( "~/buckets/b1/datasets/")
+#setwd( "~/buckets/b1/datasets/")
 
 # Cargo data
 dataset_generacion <- fread("./data/ibarra_generacion.txt.gz")
@@ -27,7 +27,9 @@ x.cols <- setdiff(names(copy(dataset_generacion)), c("numero_de_cliente", "clase
 
 
 #=====================================================
-#Entreno con modelo Línea de Muerte
+#Uso un modelo que tenga un colsample_bytree bajo
+#que fitee 300 árboles
+
 dgeneracion  <- xgb.DMatrix( data=  data.matrix( dataset_generacion[ , x.cols, with=FALSE]),
                              label= dataset_generacion[ , clase01 ])
 
@@ -37,11 +39,12 @@ set.seed( 102191 ) #seed de Gustavo
 modelo  <- xgb.train(data= dgeneracion,
                      objective= "binary:logistic",
                      tree_method= "hist",
+                     nrounds = 300,
                      max_bin= 31,
-                     base_score= mean( getinfo(dgeneracion, "label") ),
+                     base_score= mean( dataset_generacion[ , clase01 ]),
                      eta= 0.04,
-                     nrounds= 300,
-                     colsample_bytree= 0.6 )
+                     max_depth = 3,
+                     colsample_bytree= 0.3)
 
 # Me crea una matriz de 105000 x 14072
 new_features <- xgb.create.features(model = modelo, data.matrix(dataset_generacion[ , x.cols, with=FALSE]))
