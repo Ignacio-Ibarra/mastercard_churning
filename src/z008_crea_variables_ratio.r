@@ -57,6 +57,7 @@ if( infinitos_qty > 0 )
 # Guardo nuevos dataframes en carpeta
 output_folder <- "./exp/FE_RATIOS/"
 dir.create( output_folder, showWarnings = FALSE )
+j <- 1:length(string.ratios)
 fwrite(df_gen[, c("numero_de_cliente", paste0("ratio", j)), with=FALSE], paste0(output_folder,"fe_ratios_GENERACION.csv.gz"), row.names = F)
 fwrite(df_apl[, c("numero_de_cliente", paste0("ratio", j)), with=FALSE], paste0(output_folder,"fe_ratios_APLICACION.csv.gz"), row.names = F)
 
