@@ -146,6 +146,8 @@ EstimarGanancia_lightgbm  <- function( x )
     corrida.cv <- list("ganancia" = ganancia_normalizada,
                        "num_iterations" = modelocv$best_iter)
     
+    cat("corridas.cv tiene la dimensión ", dim(corridas.cv), "\n")
+    
     corridas <- append(corridas, corrida.cv)
   }
   
@@ -174,7 +176,7 @@ EstimarGanancia_lightgbm  <- function( x )
 
 
   #el lenguaje R permite asignarle ATRIBUTOS a cualquier variable
-  attr(ganancia_normalizada ,"extras" )  <- list("num_iterations"= corrida.media$num_iter_media)  #esta es la forma de devolver un parametro extra
+  attr(ganancia_media ,"extras" )  <- list("num_iterations"= corrida.media$num_iter_media)  #esta es la forma de devolver un parametro extra
 
   #logueo 
   xx  <- param_completo
