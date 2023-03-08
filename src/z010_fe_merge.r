@@ -8,10 +8,13 @@ require("data.table")
 
 # Creo función para usar distintos fe
 
+
 fe.merge <- function(fe = list(ratio=TRUE, xgb=TRUE, rpart.rules=TRUE)){
+  setwd( "~/buckets/b1/datasets/")
   gen <- fread("./data/ibarra_generacion.txt.gz")
   # cat(length(gen))
   apl <- fread("./data/ibarra_aplicacion.txt.gz")
+  setwd( "~/buckets/b1/") #me paro bien en la cancha
   if(fe$ratio == TRUE){
     s = "fe_ratios"
     paths = sprintf(c("./exp/%s/%s_GENERACION.csv.gz","./exp/%s/%s_APLICACION.csv.gz"), toupper(s), s)
@@ -42,6 +45,7 @@ gen.df <- to.merge$generacion
 apl.df <- to.merge$aplicacion
 
 # Guardo nuevos dataframes en carpeta
+setwd( "~/buckets/b1/")
 output_folder <- paste0("./exp/FE_MERGE_", format(Sys.Date(),"%d%m"),"/")
 dir.create( output_folder, showWarnings = FALSE )
 fwrite(gen.df, paste0(output_folder,"fe_merge_GENERACION.csv.gz"), row.names = F)

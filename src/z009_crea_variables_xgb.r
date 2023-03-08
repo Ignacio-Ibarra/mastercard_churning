@@ -10,7 +10,7 @@ require("lightgbm")
 #======================================================
 
 #cargo los datasets
-#setwd( "~/buckets/b1/datasets/")
+setwd( "~/buckets/b1/datasets/")
 
 # Cargo data
 dataset_generacion <- fread("./data/ibarra_generacion.txt.gz")
@@ -90,14 +90,16 @@ new_features.apl <- as.data.table(as.data.frame(as.matrix(new_features.apl)))[, 
 
 #==========================================================
 #guardo dataset generación y aplicacion sólo con nuevos features
-
-gen <- cbind(id_cli_gen, new_features[ ,important.new.features, with=FALSE])
+numero_de_cliente <- id_cli_gen
+gen <- cbind(numero_de_cliente, new_features[ ,important.new.features, with=FALSE])
 rm(new_features)
+numero_de_cliente <- id_cli_apl
 apl <- cbind(id_cli_apl, new_features.apl)
 rm(new_features.apl)
 
 
 # Guardo nuevos dataframes en carpeta
+setwd( "~/buckets/b1/")
 output_folder <- "./exp/FE_XGB/"
 dir.create( output_folder, showWarnings = FALSE )
 fwrite(gen, paste0(output_folder,"fe_xgb_GENERACION.csv.gz"), row.names = F)

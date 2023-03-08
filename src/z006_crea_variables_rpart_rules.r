@@ -9,6 +9,7 @@ require("rpart.plot")
 require("stringr")
 
 #======================================================
+setwd( "~/buckets/b1/datasets/")
 
 # Cargo data
 df_gen <- fread("./data/ibarra_generacion.txt.gz") #data original
@@ -76,6 +77,7 @@ df_apl[ , paste0("campo", j) := lapply( j, function(x) eval(parse(text = get_str
 
 
 # Guardo nuevos dataframes en carpeta
+setwd( "~/buckets/b1/")
 output_folder <- "./exp/FE_RPART_RULES/"
 dir.create( output_folder, showWarnings = FALSE )
 fwrite(df_gen[, c("numero_de_cliente", paste0("campo", j)), with=FALSE], paste0(output_folder,"fe_rpart_rules_GENERACION.csv.gz"), row.names = F)

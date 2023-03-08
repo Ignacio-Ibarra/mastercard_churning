@@ -9,6 +9,7 @@ require("stringr")
 
 
 #======================================================
+setwd( "~/buckets/b1/datasets/")
 
 # Cargo data
 df_gen <- fread("./data/ibarra_generacion.txt.gz")
@@ -55,6 +56,7 @@ if( infinitos_qty > 0 )
 
 
 # Guardo nuevos dataframes en carpeta
+setwd( "~/buckets/b1/")
 output_folder <- "./exp/FE_RATIOS/"
 dir.create( output_folder, showWarnings = FALSE )
 j <- 1:length(string.ratios)
