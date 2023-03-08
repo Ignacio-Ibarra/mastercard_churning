@@ -33,7 +33,7 @@ PARAM  <- list()
 
 day.month <- strftime(Sys.Date(),"%d%m")
 
-PARAM$experimento  <- paste0("BO",day.month)
+PARAM$experimento  <- paste0("BO","0803b")
 
 PARAM$input$dataset_generacion       <- "./exp/FE_MERGE_0803/fe_merge_GENERACION.csv.gz"
 # PARAM$input$dataset_aplicacion       <- "./data/ibarra_aplicacion.txt.gz"
