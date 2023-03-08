@@ -26,9 +26,9 @@ fe.merge <- function(fe = list(ratio=TRUE, xgb=TRUE, rpart.rules=TRUE)){
   if(fe$xgb == TRUE){
     s = "fe_xgb"
     paths = sprintf(c("./exp/%s/%s_GENERACION.csv.gz","./exp/%s/%s_APLICACION.csv.gz"), toupper(s), s)
-    gen <- merge(gen, fread(paths[1]), by.x="numero_de_cliente", by.y="id_cli_gen")
+    gen <- merge(gen, fread(paths[1]), by="numero_de_cliente")
     # cat(length(gen))
-    apl <- merge(apl, fread(paths[2]), by.x="numero_de_cliente", by.y="id_cli_apl")
+    apl <- merge(apl, fread(paths[2]), by="numero_de_cliente")
   }
   if(fe$rpart.rules == TRUE){
     s = "fe_rpart_rules"
