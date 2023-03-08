@@ -84,7 +84,7 @@ important.new.features <- important.features[grep("V\\d+", important.features)]
 #=========================================================
 
 new_features.apl <- xgb.create.features(model = modelo, 
-                                    data.matrix(dataset_aplicacion[ , x.cols, with=FALSE]))
+                                        data.matrix(dataset_aplicacion[ , x.cols, with=FALSE]))
 new_features.apl <- as.data.table(as.data.frame(as.matrix(new_features.apl)))[, important.new.features, with = FALSE]
 
 
@@ -94,7 +94,7 @@ numero_de_cliente <- id_cli_gen
 gen <- cbind(numero_de_cliente, new_features[ ,important.new.features, with=FALSE])
 rm(new_features)
 numero_de_cliente <- id_cli_apl
-apl <- cbind(id_cli_apl, new_features.apl)
+apl <- cbind(numero_de_cliente, new_features.apl)
 rm(new_features.apl)
 
 
