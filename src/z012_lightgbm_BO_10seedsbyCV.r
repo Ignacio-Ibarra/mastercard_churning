@@ -146,7 +146,7 @@ EstimarGanancia_lightgbm  <- function( x )
     corrida.cv <- list("ganancia" = ganancia_normalizada,
                        "num_iterations" = modelocv$best_iter)
     
-    cat("corridas.cv tiene la dimensión ", dim(corridas.cv), "\n")
+    cat("corrida.cv tiene la dimensión ", dim(corrida.cv), "\n")
     
     corridas <- append(corridas, corrida.cv)
   }
