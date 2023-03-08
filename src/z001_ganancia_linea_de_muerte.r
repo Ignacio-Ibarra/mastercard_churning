@@ -1,3 +1,7 @@
+# Este script calcula mediante montecarlo la ganancia 
+# estimada de la línea de muerte
+
+
 #limpio la memoria
 rm(list=ls())
 gc()
@@ -7,19 +11,11 @@ require("xgboost")
 require("parallel")
 
 
-
-alumno_apellido  <- "ibarra"
-
 #cargo los datasets
-# setwd( "~/buckets/b1/recuperatorio/uba2022/ibarra/")
+setwd( "~/buckets/b1/datasets/")
 
-data_folder <- "./data/"
-
-# dataset_generacion  <- fread( paste0( alumno_apellido, "_generacion.txt.gz") )
-# dataset_aplicacion  <- fread( paste0( alumno_apellido, "_aplicacion.txt.gz") )
-
-dataset_generacion  <- fread( paste0( data_folder, alumno_apellido ,"_generacion.txt.gz") )
-dataset_aplicacion  <- fread( paste0( data_folder, alumno_apellido,"_aplicacion.txt.gz") )
+dataset_generacion  <- fread( "./data/ibarra_generacion.txt.gz") 
+# dataset_aplicacion  <- fread( paste0( data_folder, alumno_apellido,"_aplicacion.txt.gz") )
 
 #dejo la clase en 0,1
 dataset_generacion[ , clase01 := as.integer(clase=="SI") ]
@@ -63,8 +59,6 @@ Entrenar.Obtener.Ganancia  <- function(sema)
   prediccion  <- predict( modelo,   #el modelo que genere recien
                           dval) 
   
-  
-  
   #calculo la ganancia en testing  qu es fold==2
   ganancia_test  <- dataset[ fold==2, sum( ifelse(prediccion  >  0.025, ifelse( clase01==1, 78000, -2000 ),0 )) ]
   
@@ -87,11 +81,16 @@ ksemillas  <- 1:100
 salidasMC <- mcmapply( Entrenar.Obtener.Ganancia, 
                        ksemillas,   
                        SIMPLIFY= FALSE,
-                       mc.cores= 1) 
+                       mc.cores= -1) 
 
 
 #paso la lista a df
 mc_salida  <- as.data.table(data.frame(rbindlist(salidasMC)))
 
+# Guardo nuevos dataframes en carpeta
+setwd( "~/buckets/b1/")
+output_folder <- "./exp/LINEA_MUERTE_MC"
+dir.create( output_folder, showWarnings = FALSE )
+fwrite(mc_salida, paste0(output_folder,"salidas_MC.csv.gz"), row.names = F)
 
 
