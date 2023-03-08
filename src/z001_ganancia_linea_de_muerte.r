@@ -81,7 +81,7 @@ ksemillas  <- 1:100
 salidasMC <- mcmapply( Entrenar.Obtener.Ganancia, 
                        ksemillas,   
                        SIMPLIFY= FALSE,
-                       mc.cores= -1) 
+                       mc.cores= 6) #uso una VM con 8 CPU
 
 
 #paso la lista a df
