@@ -34,7 +34,7 @@ particionar  <- function( data,  division, agrupa="",  campo="fold", start=1, se
 
 Entrenar.Obtener.Ganancia  <- function(sema)
 {
-  sprintf("\nExperimento con semilla: %d", sema)
+  cat(sprintf("\nExperimento con semilla: %d", sema))
   
   #particiono estratificadamente el dataset
   particionar( dataset, division=c(7,3), agrupa="clase01", seed = sema) 
@@ -80,8 +80,7 @@ ksemillas  <- 1:100
 
 salidasMC <- mcmapply( Entrenar.Obtener.Ganancia, 
                        ksemillas,   
-                       SIMPLIFY= FALSE,
-                       mc.cores= 6) #uso una VM con 8 CPU
+                       SIMPLIFY= FALSE) 
 
 
 #paso la lista a df
