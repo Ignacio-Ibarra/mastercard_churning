@@ -84,7 +84,7 @@ mc_salida  <- as.data.table(data.frame(rbindlist(salidasMC)))
 
 # Guardo nuevos dataframes en carpeta
 setwd( "~/buckets/b1/")
-output_folder <- "./exp/LINEA_MUERTE_MC"
+output_folder <- "./exp/LINEA_MUERTE_MC/"
 dir.create( output_folder, showWarnings = FALSE )
 fwrite(mc_salida, paste0(output_folder,"salidas_MC.csv.gz"), row.names = F)
 

@@ -23,8 +23,8 @@ setwd( "~/buckets/b1/")
 hs <- makeParamSet( 
          makeNumericParam("learning_rate",    lower=    0.005, upper=    0.05),
          makeNumericParam("feature_fraction", lower=    0.2  , upper=    0.8),
-         makeIntegerParam("min_data_in_leaf", lower=    100L   , upper=  1500L),
-         makeIntegerParam("num_leaves",       lower=    200L   , upper=  1024L)
+         makeIntegerParam("min_data_in_leaf", lower=    200L   , upper=  800L),
+         makeIntegerParam("num_leaves",       lower=    500L   , upper=  1024L)
          )
 
 #defino los parametros de la corrida, en una lista, la variable global  PARAM
