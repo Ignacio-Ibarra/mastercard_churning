@@ -12,7 +12,7 @@ require("parallel")
 
 
 #cargo los datasets
-setwd( "~/buckets/b1/datasets/")
+# setwd( "~/buckets/b1/datasets/")
 
 dataset_generacion  <- fread( "./data/ibarra_generacion.txt.gz") 
 # dataset_aplicacion  <- fread( paste0( data_folder, alumno_apellido,"_aplicacion.txt.gz") )
@@ -76,11 +76,7 @@ Entrenar.Obtener.Ganancia  <- function(sema)
 
 
 ksemillas  <- 1:100
-
-
-salidasMC <- mcmapply( Entrenar.Obtener.Ganancia, 
-                       ksemillas,   
-                       SIMPLIFY= FALSE) 
+salidasMC <- lapply(ksemillas, function(sema) Entrenar.Obtener.Ganancia(sema))
 
 
 #paso la lista a df
