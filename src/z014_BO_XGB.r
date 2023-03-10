@@ -6,7 +6,7 @@
 
 # Optimizacion Bayesiana de hiperparametros de  xgboost, con el metodo TRADICIONAL de los hiperparametros originales de xgboost
 # 5-fold cross validation
-# la probabilidad de corte es un hiperparametro
+
 
 #limpio la memoria
 rm( list=ls() )  #remove all objects
