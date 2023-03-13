@@ -42,7 +42,7 @@ hs <- makeParamSet(
   makeNumericParam("eta",              lower=  0.005 , upper=    0.05),   #equivalente a learning rate
   makeNumericParam("colsample_bytree", lower=  0.2  , upper=    1.0),   #equivalente a feature_fraction
   makeIntegerParam("min_child_weight", lower=  0L   , upper=   10L),    #groseramente equivalente a  min_data_in_leaf
-  makeIntegerParam("max_depth",        lower=  2L   , upper=   30L),    #profundidad del arbol, NO es equivalente a num_leaves
+  makeIntegerParam("max_depth",        lower=  2L   , upper=   30L)    #profundidad del arbol, NO es equivalente a num_leaves
   # makeNumericParam("prob_corte",       lower= 1/80 , upper=  1/15)     #pruebo  cortar con otras probabilidades
 )
 
@@ -164,7 +164,7 @@ setwd("~/buckets/b1/")
 output_folder <- paste0("./exp/", PARAM$experimento )
 dir.create( "./exp/",  showWarnings = FALSE ) 
 dir.create( output_folder, showWarnings = FALSE )
-setwd("./exp/HT7630/")   #Establezco el Working Directory DEL EXPERIMENTO
+setwd(output_folder)   #Establezco el Working Directory DEL EXPERIMENTO
 
 
 #en estos archivos quedan los resultados
