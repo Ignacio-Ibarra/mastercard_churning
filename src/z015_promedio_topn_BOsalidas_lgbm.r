@@ -6,7 +6,6 @@ gc()             #garbage collection
 
 require("lightgbm")
 require("data.table")
-require("purrr")
 
 #===================================================
 #Cargo data
