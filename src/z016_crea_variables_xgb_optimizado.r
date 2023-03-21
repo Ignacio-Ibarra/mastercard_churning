@@ -74,6 +74,7 @@ dgeneracion  <- xgb.DMatrix( data=  data.matrix( dataset_generacion[ , x.cols, w
 
 hclust.corte = "1.5"
 cluster = c(16)
+setwd( "~/mastercard_churning/")
 params <- get_params(bo = PARAM_EXP$BayOpt$input_code,
                      topn = 1,
                      corte = hclust.corte,
