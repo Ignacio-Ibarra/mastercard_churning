@@ -28,7 +28,7 @@ PARAM_EXP$OutputFolder <- paste0("FE_XGB", date)
 #===================================================
 
 #cargo los datasets
-# setwd( "~/buckets/b1/datasets/")
+setwd( "~/buckets/b1/datasets/")
 
 # Cargo data
 dataset_generacion <- fread(PARAM_EXP$dataset_generacion)
