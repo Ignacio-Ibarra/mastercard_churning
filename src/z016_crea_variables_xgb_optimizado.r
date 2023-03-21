@@ -83,7 +83,7 @@ params <- get_params(bo = PARAM_EXP$BayOpt$input_code,
 #llamo al XGBoost
 set.seed( PARAM_EXP$semilla_azar ) #misma seed que XGB_BO1303
 modelo  <- xgb.train(data= dgeneracion,
-                     params = params
+                     params = params,
                      base_score= mean( dataset_generacion[ , clase01 ]),
                      )
 
