@@ -6,7 +6,6 @@ gc()             #garbage collection
 
 require("lightgbm")
 require("data.table")
-require("stringr")
 require("xgboost")
 require("lightgbm")
 
@@ -45,22 +44,18 @@ x.cols <- setdiff(names(copy(dataset_generacion)), c("numero_de_cliente", "clase
 id_cli_gen <- dataset_generacion$numero_de_cliente
 id_cli_apl <- dataset_aplicacion$numero_de_cliente
 
-
 #=================================================
 #Consulto mejores parámetros. 
 
-get_params <- function(bo = "", topn=1, corte="1.5", cluster = c(0,1,2,3)){
+get_params <- function(bo = "", select_iter = ""){
   
-  corte = ifelse(grepl("\\.", corte), str_replace(corte, "\\.","_"), corte)
-  
-    #Leer archivo
-  input.file <- sprintf("./eval_BO/%s/%s_hclusters_corte%s.csv", PARAM_EXP$BayOpt$input_code, PARAM_EXP$BayOpt$input_code, corte)
+      #Leer archivo
+  input.file <- sprintf("./eval_BO/%s/%s_hclusters_corte1_5.csv", bo, bo)
   eval_BO <- fread(input.file)
   params <- colnames(eval_BO)[2:(length(colnames(eval_BO))-3)]
   
   #Order data.table
-  setorder(eval_BO, -ganancia)
-  bsp <- eval_BO[cluster_label %in% cluster, head(.SD,topn), .SDcols = params]
+  bsp <- eval_BO[iteracion == select_iter, ..params]
   
   return(as.list(bsp))
 }
@@ -72,14 +67,8 @@ dgeneracion  <- xgb.DMatrix( data=  data.matrix( dataset_generacion[ , x.cols, w
                              label= dataset_generacion[ , clase01 ])
 
 
-hclust.corte = "1.5"
-cluster = c(16)
 setwd( "~/mastercard_churning/")
-params <- get_params(bo = PARAM_EXP$BayOpt$input_code,
-                     topn = 1,
-                     corte = hclust.corte,
-                     cluster = cluster)
-
+params <- get_params(bo = PARAM_EXP$BayOpt$input_code, select_iter = 93)
 nrounds <- params$nrounds
 params$nrounds <- NULL
 
@@ -88,7 +77,7 @@ set.seed( PARAM_EXP$semilla_azar ) #misma seed que XGB_BO1303
 modelo  <- xgb.train(data= dgeneracion,
                      param = params,
                      nrounds =  nrounds, 
-                     base_score= mean( dataset_generacion[ , clase01 ]),
+                     base_score= mean( dataset_generacion[ , clase01 ])
                      )
 
 # Me crea una matriz de 105000 x 14072
