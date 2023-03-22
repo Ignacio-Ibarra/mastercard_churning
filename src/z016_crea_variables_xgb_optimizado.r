@@ -28,7 +28,7 @@ PARAM_EXP$OutputFolder <- paste0("FE_XGB", date)
 #===================================================
 
 #cargo los datasets
-setwd( "~/buckets/b1/datasets/")
+# setwd( "~/buckets/b1/datasets/")
 
 # Cargo data
 dataset_generacion <- fread(PARAM_EXP$dataset_generacion)
@@ -62,7 +62,7 @@ get_params <- function(bo = "", topn=1, corte="1.5", cluster = c(0,1,2,3)){
   setorder(eval_BO, -ganancia)
   bsp <- eval_BO[cluster_label %in% cluster, head(.SD,topn), .SDcols = params]
   
-  return(bsp)
+  return(as.list(bsp))
 }
 
 #================================================================
@@ -74,16 +74,20 @@ dgeneracion  <- xgb.DMatrix( data=  data.matrix( dataset_generacion[ , x.cols, w
 
 hclust.corte = "1.5"
 cluster = c(16)
-setwd( "~/mastercard_churning/")
+# setwd( "~/mastercard_churning/")
 params <- get_params(bo = PARAM_EXP$BayOpt$input_code,
                      topn = 1,
                      corte = hclust.corte,
                      cluster = cluster)
 
+nrounds <- params$nrounds
+params$nrounds <- NULL
+
 #llamo al XGBoost
 set.seed( PARAM_EXP$semilla_azar ) #misma seed que XGB_BO1303
 modelo  <- xgb.train(data= dgeneracion,
-                     param = as.list(params),
+                     param = params,
+                     nrounds =  nrounds, 
                      base_score= mean( dataset_generacion[ , clase01 ]),
                      )
 
