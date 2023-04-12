@@ -6,4 +6,6 @@
 data/
 exp/
 creds/
+salida/
+linea_de_muerte/
 .ipynb_checkpoints
